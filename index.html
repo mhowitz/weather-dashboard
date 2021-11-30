@@ -13,7 +13,7 @@
         <h1>Weather Dashboard</h1>
     </header>
     <main class = row>
-        <section class = "col-12 col-md-4">
+        <section class = "col-12 col-md-3">
             <div class = "border d-grid gap-2" id= "searchDiv">
                 <h2>Search For a City</h2>
                 <label class = "form-label" for ="city"></label>
@@ -24,17 +24,24 @@
                 <h2>Search History Goes Here</h2>
             </div>
         </section>
-        <section class = "col-12 col-md-8">
+        <section class = "col-12 col-md-9">
             <div class="row border" id="currentWeather">
-                <h2>Showing Weather For:</h2>
+                <h2 id = "currentCity"></h2>
+                <div class = "col-12" >
+                    <ol class="list-group" id = "currentWeatherList">
+                        <li class="list-group-item border-0" id = "currentTemp"></li>
+                        <li class="list-group-item border-0" id= "currentWind"></li>
+                        <li class="list-group-item border-0" id = "currentHumidity"></li>
+                        <li class="list-group-item border-0" id = "currentUV"></li>
+                    </ol>
+                </div>
             </div>
             <div class="row border" id = "fiveDayWeather">
-                <h2>5 Day Forecast: </h2>
             </div>
 
         </section>
     </main>
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="assets/js/script.js"></script>
 </body>
 </html>

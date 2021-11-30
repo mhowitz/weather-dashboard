@@ -1,16 +1,29 @@
 var searchBtn = document.querySelector("#searchBtn");
 var cityForm = document.querySelector("#cityForm");
+
+
+//current weather el 
+
+var currentWeatherEl = document.querySelector("#currentWeather");
+var currentWeatherList = document.querySelector("#currentWeatherList");
+var currentCity = document.getElementById("currentCity")
+var currentTemp = document.getElementById("currentTemp");
+var currentWind = document.getElementById("currentWind")
+var currentHumidity = document.getElementById("currentHumidity");
+var currentUv= document.getElementById("currentUV")
+
+var fiveDayEl = document.getElementById("fiveDayWeather");
+
 //get weather data from weather API
 
-var getWeather = function(lat, lon) {
-    var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat +"&lon="+ lon +"&appid=59a868aae444950a6d26f070902f6d03";
+var getWeather = function(lat, lon, city) {
+    var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat +"&lon="+ lon +"&appid=59a868aae444950a6d26f070902f6d03&units=imperial";
     fetch(apiUrl)
     .then(function(response) {
         if(response.ok) {
             response.json().then(function(data){
-                console.log(data);
-                return data;
-            })
+                currentWeather(city, data.current.temp, data.current.humidity, data.current.wind_speed, data.current.uvi, data.daily);
+                console.log(data);            })
         } else {
             console.log("location not found")
         }
@@ -19,20 +32,16 @@ var getWeather = function(lat, lon) {
         console.log("network error");
     });
 }
-
-getWeather(40.76, -111.89);
-
 //get coordinates from mapping service ?
-
-
 var getCords = function(city) {
-    var apiUrlCord = "http://api.positionstack.com/v1/forward?access_key=56802c3a1a281b0b65e50cf07bb5ca7b&query=" +city+ "&limit=1";
-    fetch(apiUrlCord)
+    var cityUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=59a868aae444950a6d26f070902f6d03&units=imperial`;
+    fetch(cityUrl)
     .then(function(response) {
         if(response.ok) {
             response.json().then(function(data){
-                console.log(data[0, 'latitude']);
-                return data;
+                console.log(data);
+                getWeather(data.coord.lat, data.coord.lon, data.name);
+                
             })
         } else {
             console.log("location not found")
@@ -48,9 +57,57 @@ searchBtn.addEventListener("click", function(event) {
     event.preventDefault();
     var cityName = cityForm.value.trim();
     getCords(cityName);
-    console.log(cityName);
     console.log("you clicked the search button");
 });
+
+var currentWeather = function(city, temp, humidity, windspeed, uvi, daily) {
+    var date = moment().format("dddd, MMMM Do");
+    currentCity.textContent = city + ': '+ date;
+    currentTemp.textContent = "Temp: " + temp;
+    currentWind.textContent = "Wind: " + windspeed;
+    currentHumidity.textContent = "Humidity: " + humidity;
+    currentUv.textContent= "UV: " + uvi;
+
+    currentWeatherList.appendChild(currentTemp, currentWind, currentHumidity, currentUv);
+ 
+
+    daily.splice(6)
+    console.log(daily);
+    //for loop to loop through 5 daay shit
+    for(var i = 1; i <daily.length; i++) {
+
+       futureDate = daily[i].dt;
+
+
+        var futureWeather =  document.createElement('div');
+        futureWeather.classList.add("card", "col-12", "col-md-2");
+        var cardHeader = document.createElement("h5");
+        cardHeader.textContent= moment.unix(futureDate).format('L');
+        cardHeader.classList.add("card-title");
+
+        var listGroup = document.createElement("ul");
+        var dailyTemp = document.createElement("li");
+        var dailyWind = document.createElement("li");
+        var dailyHum = document.createElement("li");
+
+        listGroup.classList.add("list-group")
+
+        dailyTemp.textContent = "Temperature: " + daily[i].temp.day;
+        dailyWind.textContent = "Wind: " + daily[i].wind_speed;
+        dailyHum.textContent = "Humidity: " + daily[i].humidity;
+
+        fiveDayEl.appendChild(futureWeather);
+        futureWeather.appendChild(cardHeader);
+        futureWeather.appendChild(listGroup);
+        listGroup.appendChild(dailyTemp);
+        listGroup.appendChild(dailyWind);
+        listGroup.appendChild(dailyHum);
+
+        console.log(daily[i].temp.day)
+    }
+
+}
+
 
 //Uv should be color coded 
 

@@ -1,0 +1,10 @@
+#fiveDayWeather li {
+    list-style: none;
+}
+#fiveDayWeather {
+    justify-content: space-around;
+}
+#fiveDayWeather div {
+    border: none;
+    background-color: lightblue;
+}
