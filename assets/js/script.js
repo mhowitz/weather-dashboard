@@ -6,7 +6,8 @@ var cityForm = document.querySelector("#cityForm");
 
 var currentWeatherEl = document.querySelector("#currentWeather");
 var currentWeatherList = document.querySelector("#currentWeatherList");
-var currentCity = document.getElementById("currentCity")
+var currentCity = document.getElementById("currentCity");
+var weatherIcon = document.getElementById("weatherIcon");
 var currentTemp = document.getElementById("currentTemp");
 var currentWind = document.getElementById("currentWind")
 var currentHumidity = document.getElementById("currentHumidity");
@@ -16,13 +17,13 @@ var fiveDayEl = document.getElementById("fiveDayWeather");
 
 //get weather data from weather API
 
-var getWeather = function(lat, lon, city) {
+var getWeather = function(lat, lon, city, icon) {
     var apiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat +"&lon="+ lon +"&appid=59a868aae444950a6d26f070902f6d03&units=imperial";
     fetch(apiUrl)
     .then(function(response) {
         if(response.ok) {
             response.json().then(function(data){
-                currentWeather(city, data.current.temp, data.current.humidity, data.current.wind_speed, data.current.uvi, data.daily);
+                currentWeather(city, data.current.temp, data.current.humidity, data.current.wind_speed, data.current.uvi, data.daily, icon);
                 console.log(data);            })
         } else {
             console.log("location not found")
@@ -40,7 +41,7 @@ var getCords = function(city) {
         if(response.ok) {
             response.json().then(function(data){
                 console.log(data);
-                getWeather(data.coord.lat, data.coord.lon, data.name);
+                getWeather(data.coord.lat, data.coord.lon, data.name, data.weather[0].icon);
                 
             })
         } else {
@@ -60,9 +61,14 @@ searchBtn.addEventListener("click", function(event) {
     console.log("you clicked the search button");
 });
 
-var currentWeather = function(city, temp, humidity, windspeed, uvi, daily) {
+var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon) {
     var date = moment().format("dddd, MMMM Do");
-    currentCity.textContent = city + ': '+ date;
+  
+    weatherImg = document.createElement("span");
+    weatherImg.innerHTML =  "<i src= http://openweathermap.org/img/w/" + icon + ".png></i>";
+    weatherIcon.appendChild(weatherImg);
+
+    currentCity.textContent = city + ': '+ date + '';
     currentTemp.textContent = "Temp: " + temp;
     currentWind.textContent = "Wind: " + windspeed;
     currentHumidity.textContent = "Humidity: " + humidity;
