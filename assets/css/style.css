@@ -8,3 +8,12 @@
     border: none;
     background-color: lightblue;
 }
+#weatherIcon i {
+    font-size: 15px;
+}
+.yellowBg {
+    background-color: yellow;
+}
+.orangeBg {
+    background-color: orange;
+}
