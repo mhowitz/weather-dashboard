@@ -1,16 +1,15 @@
 var searchBtn = document.querySelector("#searchBtn");
 var cityForm = document.querySelector("#cityForm");
 
-
+var searchHistory = document.getElementById("searchHistory");
 //current weather el 
 
 var currentWeatherEl = document.querySelector("#currentWeather");
 var currentWeatherList = document.querySelector("#currentWeatherList");
-var weatherImg = document.querySelector("#weatherImg");
 var currentCity = document.getElementById("currentCity");
 var weatherIcon = document.getElementById("weatherIcon");
 var currentTemp = document.getElementById("currentTemp");
-var currentWind = document.getElementById("currentWind");
+var currentWind = document.getElementById("currentWind")
 var currentHumidity = document.getElementById("currentHumidity");
 var currentUv= document.getElementById("currentUV")
 
@@ -27,8 +26,7 @@ var getWeather = function(lat, lon, city, icon) {
                 currentWeather(city, data.current.temp, data.current.humidity, data.current.wind_speed, data.current.uvi, data.daily, icon);
                 console.log(data);            })
         } else {
-            currentWeatherList.textContent("location not found");
-            currentWeatherEl.appendChild(currentWeatherList);
+            console.log("location not found")
         }
     })
     .catch(function(error) {
@@ -55,45 +53,37 @@ var getCords = function(city) {
     });
 }
 
+var cityNames=[];
 
+if(localStorage.getItem("city name")) {
+    cityNames= localStorage.getItem("city name");
+    for(var i=0; i<cityNames.length; i++) {
+        var historyButton= document.createElement("button");
+        historyButton.textContent= cityNames[i];
+        searchHistory.appendChild(historyButton);
+    }
 
-
+};
 
 
 searchBtn.addEventListener("click", function(event) {
     event.preventDefault();
     var cityName = cityForm.value.trim();
     getCords(cityName);
-    console.log("you clicked the search button");
-});
-//separate function to save tasks?
-//not saving all, only saves the ones from that click event so probably need separte function;
-//need to set current weather and daily weather to empty string so they do not stack on top of each other
-//
-
-var historyButtonHandler = function(event) {
-    console.log("history button works");
-    var cityHistory = event.target.textContent;
-    console.log(cityHistory);
-    getCords(cityHistory);
     currentWeatherEl.classList.remove("d-none");
     fiveDayEl.classList.remove("d-none");
-    
-}
-
-//historyButton.addEventListener("click", historyButtonHandler);
-
-
-//add attribute to each button added to screen to save to local storage?
-
+    var historyButton = document.createElement("button");
+    historyButton.textContent= cityName;
+    searchHistory.appendChild(historyButton);
+    localStorage.setItem("city name", cityForm.value);
+});
 
 var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon) {
-    
 
     var date = moment().format("dddd, MMMM Do");
   
-    weatherImg = document.createElement("span");
-    weatherImg.innerHTML =  "<i src= http://openweathermap.org/img/w/" + icon + ".png></i>";
+    var weatherImg = document.createElement("span");
+    weatherImg.innerHTML =  `<img src= http://openweathermap.org/img/w/${icon}.png alt="weather icon"/>`;
     weatherIcon.appendChild(weatherImg);
 
     currentCity.textContent = city + ': '+ date + '';
@@ -101,12 +91,20 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
     currentWind.textContent = "Wind: " + windspeed;
     currentHumidity.textContent = "Humidity: " + humidity;
     currentUv.textContent= "UV: " + uvi;
+    if (uvi <= 2) {
+        currentUv.classList.add("bg-success")
+    }else if(uvi>2&& uvi<5){
+        currentUv.classList.add("yellowBg")
+    } else if(uvi>5 && uvi<7) {
+        currentUv.classList.add("orangeBg")
+    } else {
+        currentUv.classList.add("bg-danger")
+    };
 
     currentWeatherList.appendChild(currentTemp, currentWind, currentHumidity, currentUv);
  
 
     daily.splice(6)
-    console.log(daily);
     //for loop to loop through 5 daay shit
     for(var i = 1; i <daily.length; i++) {
 
@@ -114,10 +112,10 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
 
 
         var futureWeather =  document.createElement('div');
-        futureWeather.classList.add("card", "row-cols-md-5");
+        futureWeather.classList.add("card", "col-12", "col-md-2");
         var cardHeader = document.createElement("h5");
         cardHeader.textContent= moment.unix(futureDate).format('L');
-        cardHeader.classList.add("card-header");
+        cardHeader.classList.add("card-title");
 
         var listGroup = document.createElement("ul");
         var dailyTemp = document.createElement("li");
@@ -126,32 +124,22 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
 
         var weatherImg = document.createElement("span");
         weatherImg.innerHTML =  `<img src= http://openweathermap.org/img/w/${daily[i].weather[0].icon}.png alt="weather icon"/>`;
-        
-        weatherImg.classList.add('justify-center')
-        listGroup.classList.add("list-group", "list-group-flush")
+       
 
-        dailyTemp.textContent = "Temp: " + daily[i].temp.day;
+        listGroup.classList.add("list-group")
+
+        dailyTemp.textContent = "Temperature: " + daily[i].temp.day;
         dailyWind.textContent = "Wind: " + daily[i].wind_speed;
         dailyHum.textContent = "Humidity: " + daily[i].humidity;
 
-        
-
-        var listClass = ['list-group-item', 'border-0']
-
-        dailyTemp.classList.add(listClass);
-        dailyWind.classList.add(listClass);
-        dailyHum.classList.add(listClass);
-
         fiveDayEl.appendChild(futureWeather);
         futureWeather.appendChild(cardHeader);
+        futureWeather.appendChild(weatherImg);
         futureWeather.appendChild(listGroup);
         listGroup.appendChild(dailyTemp);
         listGroup.appendChild(dailyWind);
         listGroup.appendChild(dailyHum);
-
-        console.log(daily[i].temp.day)
     }
-
 
 }
 
@@ -166,4 +154,3 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
 //search history made into buttons
 
 //local storage for search history???
-
