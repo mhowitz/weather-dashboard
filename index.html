@@ -8,27 +8,36 @@
     <link rel= "stylesheet" href="assets/css/style.css">
     <title>Weather Dashboard</title>
 </head>
-<body class = "container">
+<body class = "container-fluid">
     <header class= "row justify-content-center p-3">
         <h1>Weather Dashboard</h1>
     </header>
     <main class = row>
         <section class = "col-12 col-md-3">
-            <div class = "border d-grid gap-2" id= "searchDiv">
-                <h2>Search For a City</h2>
-                <label class = "form-label" for ="city"></label>
-                <input name= "city" id= "cityForm" type= "text" autofocus= "true" class = "form-input"/>
-                <button type= "submit" class= "btn btn-primary width-100" id= "searchBtn">Search</button>
+            <div class = "card border" id= "searchDiv">
+                <h2 class = "card-header">Search For a City</h2>
+                <form class="card-body">
+                    <label class = "form-label" for ="city"></label>
+                    <input name= "city" id= "cityForm" type= "text" autofocus= "true" class = "form-input"/>
+                    <div class="d-gri gap-2">
+                        <button type= "submit" class= "btn btn-primary" id= "searchBtn">Search</button>
+    
+                    </div>
+
+                </form>
+
             </div>
-            <div class="border" id = "searchHistory">
-                <h2>Search History Goes Here</h2>
+            <div class="border card">
+                <h2 class= "card-header ">Search History</h2>
+                <div class="card-body" id="searchHistory"></div>
             </div>
         </section>
-        <section class = "col-12 col-md-9">
-            <div class="row border d-none" id="currentWeather">
-                <h2 id = "currentCity"></h2>
-                <div id="weatherIcon">
-                </div>
+        <section class = "col-12 col-md-9 p-">
+            <div class="card row border-none d-none" id="currentWeather">
+                <h2 class = "card-header" id = "currentCity"></h2>
+                <div id = "weatherIcon" class="list-group-item border-0"></div>
+                
+               
                 <div class = "col-12" >
                     <ol class="list-group" id = "currentWeatherList">
                         <li class="list-group-item border-0" id = "currentTemp"></li>
@@ -38,6 +47,8 @@
                     </ol>
                 </div>
             </div>
+        </br>
+
             <div class="row border d-none" id = "fiveDayWeather">
             </div>
 

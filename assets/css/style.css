@@ -2,11 +2,14 @@
     list-style: none;
 }
 #fiveDayWeather {
-    justify-content: space-around;
+    justify-content: space-between;
+    border: 0;
 }
 #fiveDayWeather div {
-    border: none;
+    border: 0;
     background-color: lightblue;
+    box-shadow: rgba(255, 255, 255, 0.5);
+    line-height: 2;
 }
 #weatherIcon i {
     font-size: 15px;
