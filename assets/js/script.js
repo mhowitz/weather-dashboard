@@ -1,7 +1,7 @@
 var searchBtn = document.querySelector("#searchBtn");
 var cityForm = document.querySelector("#cityForm");
 
-var searchHistory = document.getElementById("searchHistory");
+
 //current weather el 
 
 var currentWeatherEl = document.querySelector("#currentWeather");
@@ -64,54 +64,7 @@ searchBtn.addEventListener("click", function(event) {
     event.preventDefault();
     var cityName = cityForm.value.trim();
     getCords(cityName);
-    currentWeatherEl.classList.remove("d-none");
-    fiveDayEl.classList.remove("d-none");
-    saveSearches(cityName);
-    loadSearches(cityName);
-});
-
-//add cities to local storage in a different function
-
-
-var saveSearches = function(cityName) {
-    var cityNames = {
-        name: cityName
-    };
-    //var cityName = cityForm.value.trim();
-    var historyButton = document.createElement("button");
-    historyButton.textContent= cityName;
-    searchHistory.appendChild(historyButton);
-   // historyButton.setAttribute("city-Id", cityCounter)
-    //cityNames.push(cityName);
-    console.log(cityNames);
-    
-    localStorage.setItem("cityName", JSON.stringify(cityNames));
-    
-};
-var loadSearches= function(cityNames) {
-    if(localStorage.getItem("cityName", cityNames)) {
-        var savedCities = localStorage.getItem("cityName",cityNames);
-        savedCities = JSON.parse(savedCities);
-        //savedC.split(',');
-        for(var i=0; i<savedCities.length; i++) {
-            var historyButton= document.createElement("button");
-            historyButton.textContent= savedCities[i].name;
-            historyButton.classList.add("btn","btn-primary", "d-grid", "gap-2");
-            searchHistory.appendChild(historyButton);
-            
-        }
-    
-    };
-    
-}
-
-
-
-
-searchHistory.addEventListener("click", function(event) {
-    if (event.target.matches("button")) {
-        historyButtonHandler(event);
-    }
+    console.log("you clicked the search button");
 });
 //separate function to save tasks?
 //not saving all, only saves the ones from that click event so probably need separte function;
@@ -139,8 +92,8 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
 
     var date = moment().format("dddd, MMMM Do");
   
-    var weatherImg = document.createElement("span");
-    weatherImg.innerHTML =  `<img src= http://openweathermap.org/img/w/${icon}.png alt="weather icon"/>`;
+    weatherImg = document.createElement("span");
+    weatherImg.innerHTML =  "<i src= http://openweathermap.org/img/w/" + icon + ".png></i>";
     weatherIcon.appendChild(weatherImg);
 
     currentCity.textContent = city + ': '+ date + '';
@@ -148,20 +101,12 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
     currentWind.textContent = "Wind: " + windspeed;
     currentHumidity.textContent = "Humidity: " + humidity;
     currentUv.textContent= "UV: " + uvi;
-    if (uvi <= 2) {
-        currentUv.classList.add("bg-success")
-    }else if(uvi>2&& uvi<5){
-        currentUv.classList.add("yellowBg")
-    } else if(uvi>5 && uvi<7) {
-        currentUv.classList.add("orangeBg")
-    } else {
-        currentUv.classList.add("bg-danger")
-    };
 
     currentWeatherList.appendChild(currentTemp, currentWind, currentHumidity, currentUv);
  
 
     daily.splice(6)
+    console.log(daily);
     //for loop to loop through 5 daay shit
     for(var i = 1; i <daily.length; i++) {
 
@@ -199,11 +144,12 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
 
         fiveDayEl.appendChild(futureWeather);
         futureWeather.appendChild(cardHeader);
-        futureWeather.appendChild(weatherImg);
         futureWeather.appendChild(listGroup);
         listGroup.appendChild(dailyTemp);
         listGroup.appendChild(dailyWind);
         listGroup.appendChild(dailyHum);
+
+        console.log(daily[i].temp.day)
     }
 
 

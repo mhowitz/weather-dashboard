@@ -8,6 +8,7 @@
 #fiveDayWeather div {
     border: 0;
     background-color: lightblue;
+<<<<<<< HEAD
     box-shadow: rgba(255, 255, 255, 0.5);
     line-height: 2;
 }
@@ -19,4 +20,6 @@
 }
 .orangeBg {
     background-color: orange;
+=======
+>>>>>>> parent of d6f5c46 (working on local storage)
 }
