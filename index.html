@@ -9,31 +9,33 @@
     <title>Weather Dashboard</title>
 </head>
 <body class = "container-fluid">
-    <header class= "row justify-content-center p-3">
+    <header class= "row justify-content-center p-3 bg-info">
         <h1>Weather Dashboard</h1>
     </header>
     <main class = row>
         <section class = "col-12 col-md-3">
-            <div class = "card border" id= "searchDiv">
-                <h2 class = "card-header">Search For a City</h2>
-                <form class="card-body">
-                    <label class = "form-label" for ="city"></label>
-                    <input name= "city" id= "cityForm" type= "text" autofocus= "true" class = "form-input"/>
-                    <div class="d-gri gap-2">
-                        <button type= "submit" class= "btn btn-primary" id= "searchBtn">Search</button>
+            <div class = "border-bottom" id= "searchDiv">
+                <h3 class = " text-center pt-2 pb-0">Search For a City</h3>
+                <form class="p-2">
+                    <input name= "city" id= "cityForm" type= "text" autofocus= "true" class = "form-control" placeholder="City"/>
+                </br>
+                    <div class="d-grid gap-2 mx-auto ">
+                        <button type= "submit" class= "btn btn-primary btn-block bg-secondary" id= "searchBtn">Search</button>
     
                     </div>
 
                 </form>
-
+            </br>
             </div>
-            <div class="border card">
-                <h2 class= "card-header ">Search History</h2>
-                <div class="card-body" id="searchHistory"></div>
+        </br>
+            <div class="">
+                <h4 class= "text-center pt-2 ">Search History</h4>
+            </br>
+                <div class="" id="searchHistory"></div>
             </div>
         </section>
         <section class = "col-12 col-md-9">
-            <div class="row border" id="currentWeather">
+            <div class="row" id="currentWeather">
                 <h2 id = "currentCity"></h2>
                 <div id="weatherIcon">
                 </div>
@@ -47,8 +49,9 @@
                 </div>
             </div>
         </br>
-
-            <div class="row border d-none" id = "fiveDayWeather">
+        <h4 id="fiveTitle" class="text-left d-none">5 Day Forecast:</h4>
+            <div class="row d-none" id = "fiveDayWeather">
+                
             </div>
 
         </section>

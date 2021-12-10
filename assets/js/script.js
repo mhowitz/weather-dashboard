@@ -2,6 +2,7 @@ var searchBtn = document.querySelector("#searchBtn");
 var cityForm = document.querySelector("#cityForm");
 
 var searchHistory = document.getElementById("searchHistory");
+var fiveDayTitle = document.getElementById("fiveTitle");
 //current weather el 
 
 var currentWeatherEl = document.querySelector("#currentWeather");
@@ -26,7 +27,7 @@ var getWeather = function(lat, lon, city, icon) {
                 currentWeather(city, data.current.temp, data.current.humidity, data.current.wind_speed, data.current.uvi, data.daily, icon);
                 console.log(data);            })
         } else {
-            console.log("location not found")
+
         }
     })
     .catch(function(error) {
@@ -45,7 +46,9 @@ var getCords = function(city) {
                 
             })
         } else {
-            console.log("location not found")
+            var errorMsg = document.createElement("h2");
+            errorMsg.textContent= "Location Not Found";
+            currentCity.append(errorMsg);
         }
     })
     .catch(function(error) {
@@ -59,6 +62,7 @@ if(localStorage.getItem("city name")) {
     cityNames= JSON.parse(localStorage.getItem("city name"));
     for(var i=0; i<cityNames.length; i++) {
         var historyButton= document.createElement("button");
+        historyButton.classList.add("btn", "btn-primary", "btn-block", "bg-info");
         historyButton.textContent= cityNames[i];
         searchHistory.appendChild(historyButton);
         
@@ -73,12 +77,19 @@ searchBtn.addEventListener("click", function(event) {
     getCords(cityName);
     currentWeatherEl.classList.remove("d-none");
     fiveDayEl.classList.remove("d-none");
-    var historyButton = document.createElement("button");
-    historyButton.textContent= cityName;
-    searchHistory.appendChild(historyButton);
-    var cityNames = JSON.parse(localStorage.getItem("city name")) || [];
-    cityNames.push(cityName);
-    localStorage.setItem("city name", JSON.stringify(cityNames));
+    fiveDayTitle.classList.remove("d-none");
+    if (cityName==="" || cityName=== " ") {
+        return
+    }else {
+        var historyButton = document.createElement("button");
+        historyButton.classList.add("btn", "btn-primary", "btn-block", "bg-info");
+        historyButton.textContent= cityName;
+        searchHistory.appendChild(historyButton);
+        var cityNames = JSON.parse(localStorage.getItem("city name")) || [];
+        cityNames.push(cityName);
+        localStorage.setItem("city name", JSON.stringify(cityNames));
+    }
+
 });
 
 
@@ -93,12 +104,11 @@ searchHistory.addEventListener("click", function(event) {
 
 
 var historyButtonHandler = function(event) {
-    console.log("history button works");
     var cityHistory = event.target.textContent;
-    console.log(cityHistory);
     getCords(cityHistory);
     currentWeatherEl.classList.remove("d-none");
     fiveDayEl.classList.remove("d-none");
+    fiveDayTitle.classList.remove("d-none");
 
 }
 
@@ -118,10 +128,10 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
     weatherIcon.appendChild(weatherImg);
 
     currentCity.textContent = city + ': '+ date + '';
-    currentTemp.textContent = "Temp: " + temp;
-    currentWind.textContent = "Wind: " + windspeed;
-    currentHumidity.textContent = "Humidity: " + humidity;
-    currentUv.textContent= "UV: " + uvi;
+    currentTemp.textContent = "Temp: " + temp + "°F";
+    currentWind.textContent = "Wind: " + windspeed + " MPH";
+    currentHumidity.textContent = "Humidity: " + humidity + "%";
+    currentUv.textContent= "UV Index: " + uvi;
     if (uvi <= 2) {
         currentUv.classList.add("bg-success")
     }else if(uvi>2&& uvi<5){
@@ -143,7 +153,7 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
 
 
         var futureWeather =  document.createElement('div');
-        futureWeather.classList.add("card", "col-12", "col-md-2");
+        futureWeather.classList.add("card", "col-12", "col-md-4", "col-lg-2");
         var cardHeader = document.createElement("h5");
         cardHeader.textContent= moment.unix(futureDate).format('L');
         cardHeader.classList.add("card-title");
@@ -159,9 +169,9 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
 
         listGroup.classList.add("list-group")
 
-        dailyTemp.textContent = "Temperature: " + daily[i].temp.day;
-        dailyWind.textContent = "Wind: " + daily[i].wind_speed;
-        dailyHum.textContent = "Humidity: " + daily[i].humidity;
+        dailyTemp.textContent = "Temp: " + daily[i].temp.day + "°F";
+        dailyWind.textContent = "Wind: " + daily[i].wind_speed + " MPH";
+        dailyHum.textContent = "Humidity: " + daily[i].humidity + "%";
 
         fiveDayEl.appendChild(futureWeather);
         futureWeather.appendChild(cardHeader);
