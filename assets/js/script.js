@@ -56,11 +56,12 @@ var getCords = function(city) {
 var cityNames=[];
 
 if(localStorage.getItem("city name")) {
-    cityNames= localStorage.getItem("city name");
+    cityNames= JSON.parse(localStorage.getItem("city name"));
     for(var i=0; i<cityNames.length; i++) {
         var historyButton= document.createElement("button");
         historyButton.textContent= cityNames[i];
         searchHistory.appendChild(historyButton);
+        
     }
 
 };
@@ -75,11 +76,41 @@ searchBtn.addEventListener("click", function(event) {
     var historyButton = document.createElement("button");
     historyButton.textContent= cityName;
     searchHistory.appendChild(historyButton);
-    localStorage.setItem("city name", cityForm.value);
+    var cityNames = JSON.parse(localStorage.getItem("city name")) || [];
+    cityNames.push(cityName);
+    localStorage.setItem("city name", JSON.stringify(cityNames));
 });
 
-var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon) {
 
+searchHistory.addEventListener("click", function(event) {
+    if (event.target.matches("button")) {
+        historyButtonHandler(event);
+    } else {
+        console.log("invalid")
+    }
+});
+
+
+
+var historyButtonHandler = function(event) {
+    console.log("history button works");
+    var cityHistory = event.target.textContent;
+    console.log(cityHistory);
+    getCords(cityHistory);
+    currentWeatherEl.classList.remove("d-none");
+    fiveDayEl.classList.remove("d-none");
+
+}
+
+
+var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon) {
+    weatherIcon.textContent='';
+    currentCity.textContent = '';
+    currentTemp.textContent = '';
+    currentWind.textContent = '';
+    currentHumidity.textContent = '';
+    currentUv.textContent= '';
+    fiveDayEl.innerHTML="";
     var date = moment().format("dddd, MMMM Do");
   
     var weatherImg = document.createElement("span");
@@ -103,11 +134,11 @@ var currentWeather = function(city, temp, humidity, windspeed, uvi, daily, icon)
 
     currentWeatherList.appendChild(currentTemp, currentWind, currentHumidity, currentUv);
  
-
+    
     daily.splice(6)
     //for loop to loop through 5 daay shit
     for(var i = 1; i <daily.length; i++) {
-
+       
        futureDate = daily[i].dt;
 
 
